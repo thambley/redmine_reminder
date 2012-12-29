@@ -28,7 +28,7 @@ class ReminderConfiguration < ActiveRecord::Base
 
   class << self
     def instance
-      first || create!
+      first || create!({:days => 7, :issue_status_selector => ALL_OPENED, :project_selector => ALL, :tracker_selector => ALL, :send_to_author => true, :send_to_assigned_to => true, :send_to_watcher => true, :send_to_custom_user => false})
     end
   end
 
