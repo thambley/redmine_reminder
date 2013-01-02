@@ -1,9 +1,7 @@
 class ReminderAllMailer < Mailer
-
   helper :reminder_all
 
   def reminder_all(user, assigned_issues, auth_issues, watched_issues, custom_user_issues, days)
-    set_language_if_valid user.language
     day_tag = [l(:mail_reminder_all_day1), l(:mail_reminder_all_day2),
                l(:mail_reminder_all_day2), l(:mail_reminder_all_day2),
                l(:mail_reminder_all_day5)]
@@ -23,8 +21,8 @@ class ReminderAllMailer < Mailer
     @custom_user_issues = custom_user_issues
     @days = days
     @issues_url = url_for(:controller => 'issues', :action => 'index',
-                           :set_filter => 1, :assigned_to_id => user.id,
-                           :sort_key => 'due_date', :sort_order => 'asc')
+                          :set_filter => 1, :assigned_to_id => user.id,
+                          :sort_key => 'due_date', :sort_order => 'asc')
 
     mail :to => user.mail, 
       :subject => l(plural_subject_term, :count => issues_count, :days => days, :day => l_day_dag)

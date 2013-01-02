@@ -1,7 +1,7 @@
 require 'redmine'
 require 'dynamic_form'
 
-ActionDispatch::Callbacks.to_prepare do
+Rails.configuration.to_prepare do
   require_dependency 'tracker'
   require_dependency 'redmine_reminder/hooks'
   unless Tracker.included_modules.include? RedmineReminder::TrackerPatch

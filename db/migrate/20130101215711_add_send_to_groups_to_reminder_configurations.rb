@@ -1,9 +1,13 @@
 class AddSendToGroupsToReminderConfigurations < ActiveRecord::Migration
   def self.up
-    add_column :reminder_configurations, :send_to_groups, :boolean
+    unless column_exists? :reminder_configurations, :send_to_groups
+      add_column :reminder_configurations, :send_to_groups, :boolean
+    end
   end
 
   def self.down
-    remove_column :reminder_configurations, :send_to_groups
+    if column_exists? :reminder_configurations, :send_to_groups
+      remove_column :reminder_configurations, :send_to_groups
+    end
   end
 end

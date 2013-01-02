@@ -9,13 +9,16 @@ class ReminderConfiguration < ActiveRecord::Base
   PROJECT_VARIANTS = [ALL, EXPLICIT]
   TRACKER_VARIANTS = [ALL, EXPLICIT]
 
-  validates_presence_of :days
-  validates_inclusion_of :issue_status_selector, :in => ISSUE_STATUS_VARIANTS
-  validates_presence_of :issue_status_selector
-  validates_inclusion_of :project_selector, :in => PROJECT_VARIANTS
-  validates_presence_of :project_selector
-  validates_inclusion_of :tracker_selector, :in => TRACKER_VARIANTS
-  validates_presence_of :tracker_selector
+  validates :days, :presence => true
+  validates :issue_status_selector,
+            :presence => true,
+            :inclusion => { :in => ISSUE_STATUS_VARIANTS }
+  validates :project_selector,
+            :presence => true,
+            :inclusion => { :in => PROJECT_VARIANTS }
+  validates :tracker_selector,
+            :presence => true,
+            :inclusion => { :in => TRACKER_VARIANTS }
 
   has_many :reminder_issue_statuses
   has_many :issue_statuses, :through => :reminder_issue_statuses
@@ -28,26 +31,8 @@ class ReminderConfiguration < ActiveRecord::Base
 
   class << self
     def instance
-      first || create!({:days => 7, :issue_status_selector => ALL_OPENED, :project_selector => ALL, :tracker_selector => ALL, :send_to_author => true, :send_to_assigned_to => true, :send_to_watcher => true, :send_to_custom_user => false})
+      first_or_create!({:days => 7, :issue_status_selector => ALL_OPENED, :project_selector => ALL, :tracker_selector => ALL, :send_to_author => true, :send_to_assigned_to => true, :send_to_watcher => true, :send_to_custom_user => false, :send_to_groups => false})
     end
   end
 
-  def after_initialize
-    set_default_values if new_record?
-  end
-
-  private
-
-  def set_default_values
-    self.days ||= 7
-    self.issue_status_selector ||= ALL_OPENED
-    self.project_selector ||= ALL
-    self.tracker_selector ||= ALL
-    self.send_to_author = true if self.send_to_author.nil?
-    self.send_to_assigned_to = true if self.send_to_assigned_to.nil?
-    self.send_to_watcher = true if self.send_to_watcher.nil?
-    self.send_to_custom_user ||= false
-    self.send_to_groups ||= false
-    true
-  end
 end
