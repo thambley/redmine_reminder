@@ -50,7 +50,11 @@
   <%= f.check_box :send_to_custom_user %>
   <%= f.label :send_to_custom_user, l(:field_custom_user) %>
   <br/>
-
+  
+  <%= f.check_box :send_to_groups %>
+  <%= f.label :send_to_groups, l(:field_groups) %>
+  <br/>
+  
   <hr/>
   <%= f.submit l(:button_save) %>
 

@@ -47,6 +47,7 @@ class ReminderConfiguration < ActiveRecord::Base
     self.send_to_assigned_to = true if self.send_to_assigned_to.nil?
     self.send_to_watcher = true if self.send_to_watcher.nil?
     self.send_to_custom_user ||= false
+    self.send_to_groups ||= false
     true
   end
 end

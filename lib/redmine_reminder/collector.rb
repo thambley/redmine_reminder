@@ -18,9 +18,17 @@ class RedmineReminder::Collector
       end
 
       if options.send_to_assigned_to? && issue.assigned_to
-        reminders[issue.assigned_to] ||=
-            RedmineReminder::Reminder.new(issue.assigned_to)
-        reminders[issue.assigned_to][:assigned_to] << issue
+        if issue.assigned_to.is_a?(User)
+          reminders[issue.assigned_to] ||=
+              RedmineReminder::Reminder.new(issue.assigned_to)
+          reminders[issue.assigned_to][:assigned_to] << issue
+        elsif options.send_to_groups
+          issue.assigned_to.users.each do |user|
+            reminders[user] ||=
+                RedmineReminder::Reminder.new(user)
+            reminders[user][:assigned_to] << issue
+          end
+        end
       end
 
       if options.send_to_watcher?
